@@ -7,3 +7,5 @@ const getRandomNumber = (valueFrom, valueUpTo, numberDemicalPlaces) => {
 
   return randomResult.toFixed(numberDemicalPlaces);
 };
+
+getRandomNumber(3, 24, 6);
