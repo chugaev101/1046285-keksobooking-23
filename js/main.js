@@ -1,11 +1,12 @@
 const getRandomNumber = (valueFrom, valueUpTo, numberDemicalPlaces) => {
-  if (valueFrom >= valueUpTo) {
-    return false;
+  if (valueFrom > valueUpTo) {
+    [valueFrom, valueUpTo] = [valueUpTo, valueFrom];
   }
 
   const randomResult = Math.random() * (valueUpTo - valueFrom) + valueFrom;
 
-  return randomResult.toFixed(numberDemicalPlaces);
+  return +randomResult.toFixed(numberDemicalPlaces);
 };
 
-getRandomNumber(3, 24, 6);
+// eslint-disable-next-line no-console
+console.log(getRandomNumber(15, 5, 2));
