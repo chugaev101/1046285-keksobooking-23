@@ -8,5 +8,4 @@ const getRandomNumber = (valueFrom, valueUpTo, numberDemicalPlaces) => {
   return +randomResult.toFixed(numberDemicalPlaces);
 };
 
-// eslint-disable-next-line no-console
-console.log(getRandomNumber(15, 5, 2));
+getRandomNumber(15, 5, 2);
