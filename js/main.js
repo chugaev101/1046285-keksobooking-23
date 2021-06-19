@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import './app/form.js';
 import {generateTestAds} from './tools/test-data.js';
 import {createCard} from './app/create-card.js';
 

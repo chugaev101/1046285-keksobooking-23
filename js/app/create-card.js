@@ -1,60 +1,76 @@
-const TEMPLATE_CARD = document.querySelector('#card').content;
+const templateCard = document.querySelector('#card').content;
 
 const createCard = (obj) => {
-  const newCard = TEMPLATE_CARD.cloneNode(true);
+  const newCard = templateCard.cloneNode(true);
+  const avatar = newCard.querySelector('.popup__avatar');
 
-  const descriptionRoomOpacity = function () {
-    const ROOMS = obj.offer.rooms;
-    const GUESTS = obj.offer.guests;
+  (obj.author.avatar) ? avatar.src = obj.author.avatar : avatar.src = 'img/avatars/default.png';
+
+  const getRoomCapacityText = () => {
+    const rooms = obj.offer.rooms;
+    const guests = obj.offer.guests;
     let textForRooms;
     let textForGuests;
 
+    if (!rooms || !guests) {
+      return '';
+    }
+
     switch (true) {
-      case ROOMS === 1 || ROOMS % 10 === 1:
+      case rooms === 1 || rooms % 10 === 1:
         textForRooms = 'комната для';
         break;
-      case ROOMS >= 2 && ROOMS < 5 || ROOMS % 10 >= 2 && ROOMS % 10 < 5:
+      case rooms >= 2 && rooms < 5 || rooms % 10 >= 2 && rooms % 10 < 5:
         textForRooms = 'комнаты для';
         break;
-      case ROOMS >= 5 && ROOMS <= 10 || ROOMS % 10 === 0:
+      case rooms >= 5 && rooms <= 10 || rooms % 10 === 0:
         textForRooms = 'комнат для';
         break;
     }
 
     switch (true) {
-      case GUESTS === 1 || GUESTS % 10 === 1:
+      case guests === 1 || guests % 10 === 1:
         textForGuests = 'гостя';
         break;
-      case GUESTS > 1 && GUESTS % 10 !== 1:
+      case guests > 1 && guests % 10 !== 1:
         textForGuests = 'гостей';
         break;
     }
 
-    return `${ROOMS} ${textForRooms} ${GUESTS} ${textForGuests}`;
+    return `${rooms} ${textForRooms} ${guests} ${textForGuests}`;
   };
 
-  // добавляет фотографий помещения
-  ( function () {
-    const PHOTOS = obj.offer.photos;
-    const PHOTO_LIST = newCard.querySelector('.popup__photos');
-    let photoTemplate = PHOTO_LIST.removeChild(newCard.querySelector('.popup__photo'));
+  const addPhotos = () => {
+    const photos = obj.offer.photos;
+    const photoList = newCard.querySelector('.popup__photos');
+    let photoTemplate = photoList.removeChild(newCard.querySelector('.popup__photo'));
 
-    PHOTOS.forEach((photoLink) => {
+    if (photos.length === 0) {
+      photoList.remove();
+    }
+
+    photos.forEach((photoLink) => {
       photoTemplate = photoTemplate.cloneNode(true);
       photoTemplate.src = photoLink;
-      PHOTO_LIST.appendChild(photoTemplate);
+      photoList.appendChild(photoTemplate);
     });
-  }());
+  };
 
-  newCard.querySelector('.popup__title').textContent = obj.offer.title;
-  newCard.querySelector('.popup__text--address').textContent = obj.offer.address;
-  newCard.querySelector('.popup__text--price').textContent = `${obj.offer.price} ₽/ночь`;
-  newCard.querySelector('.popup__type').textContent = obj.offer.type;
-  newCard.querySelector('.popup__text--capacity').textContent = descriptionRoomOpacity();
-  newCard.querySelector('.popup__text--time').textContent = `Заезд после ${obj.offer.checkin}, выезд до ${obj.offer.checkout}`;
-  newCard.querySelector('.popup__features').textContent = obj.offer.features.join(', ');
-  newCard.querySelector('.popup__description').textContent = obj.offer.description;
-  newCard.querySelector('.popup__avatar').src = obj.author.avatar;
+  addPhotos();
+
+  const addDataToElement = (selector, data) => {
+    (data) ? newCard.querySelector(selector).textContent = data : newCard.querySelector(selector).remove();
+  };
+
+  addDataToElement('.popup__title', obj.offer.title);
+  addDataToElement('.popup__text--address', obj.offer.address);
+  addDataToElement('.popup__text--price', `${obj.offer.price} ₽/ночь`);
+  addDataToElement('.popup__type', obj.offer.type);
+  addDataToElement('.popup__text--capacity', getRoomCapacityText());
+  addDataToElement('.popup__text--time', `Заезд после ${obj.offer.checkin}, выезд до ${obj.offer.checkout}`);
+  addDataToElement('.popup__features', obj.offer.features.join(', '));
+  addDataToElement('.popup__description', obj.offer.description);
+  addDataToElement('.popup__avatar', obj.author.avatar);
 
   return newCard;
 };
