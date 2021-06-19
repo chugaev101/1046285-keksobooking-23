@@ -1,4 +1,8 @@
+/* eslint-disable no-unused-vars */
 import {generateTestAds} from './tools/test-data.js';
+import {createCard} from './app/create-card.js';
 
-// eslint-disable-next-line no-console
-console.log(generateTestAds());
+const TEST_DATA = generateTestAds();
+const CANVAS = document.querySelector('#map-canvas');
+
+CANVAS.appendChild(createCard(TEST_DATA[0]));
