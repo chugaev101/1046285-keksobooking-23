@@ -45,7 +45,7 @@ const createCard = (obj) => {
     const photoList = newCard.querySelector('.popup__photos');
     let photoTemplate = photoList.removeChild(newCard.querySelector('.popup__photo'));
 
-    if (photos.length === 0) {
+    if (!photos.length) {
       photoList.remove();
     }
 
