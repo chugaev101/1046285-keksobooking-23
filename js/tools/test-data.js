@@ -1,6 +1,8 @@
 import {getRandomNumber, getRandomArrayElement, getArrayRandomSlice, cutRandomArrayElement} from './utils.js';
 
 const PREMISES_TYPES = {'palace': 'Дворец', 'flat': 'Квартира', 'house': 'Дом', 'bungalow': 'Бунгало', 'hotel': 'Отель'};
+
+
 const TIME = ['12:00', '13:00', '14:00'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const titles = ['Hotel Sunroute Plaza Shinjuku', 'Sotetsu Fresa Inn Kanda-Otemachi', 'Sotetsu Fresa Inn Ginza-Nanachome', 'Sotetsu Grand Fresa Tokyo-Bay Ariake', 'Grand Nikko Tokyo Daiba', 'THE KNOT TOKYO Shinjuku', 'Sotetsu Fresa Inn Tokyo Kinshicho', 'JR Kyushu Hotel Blossom Shinjuku', 'THE BLOSSOM HIBIYA', 'Grand Hyatt Tokyo'];
