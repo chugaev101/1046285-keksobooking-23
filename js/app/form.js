@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
 const adForm = document.querySelector('.ad-form');
 const formElements = adForm.querySelectorAll('.ad-form__element');
 const titleInput = adForm.querySelector('#title');
 const titleMinLength = titleInput.minLength;
 const titleMaxLength = titleInput.maxLength;
 const CHARACTERS_REMAINING = 11;
+const coordinateInput = adForm.querySelector('#address');
 const typeInput = adForm.querySelector('#type');
 const MIN_PRICES_FOR_TYPES = {'bungalow': 0, 'flat': 1000, 'hotel': 3000, 'house': 5000, 'palace': 10000};
 const priceInput = adForm.querySelector('#price');
@@ -14,6 +14,7 @@ const numberSeatsInput = adForm.querySelector('#capacity');
 const numberSeatsOptions = numberSeatsInput.querySelectorAll('option');
 const formCheckInTime = adForm.querySelector('.ad-form__element--time');
 const checkInLists = formCheckInTime.querySelectorAll('select');
+const resetButton = adForm.querySelector('.ad-form__reset');
 
 const deactivatePage = () => {
   adForm.classList.add('ad-form--disabled');
@@ -80,5 +81,9 @@ formCheckInTime.addEventListener('input', (evt) => {
   });
 });
 
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+});
 
-export {deactivatePage, activatePage};
+export {deactivatePage, activatePage, resetButton, coordinateInput};
