@@ -1,4 +1,5 @@
-const templateCard = document.querySelector('#card').content;
+const fragmentCard = document.querySelector('#card').content;
+const templateCard = fragmentCard.querySelector('.popup');
 
 const createCard = (obj) => {
   const newCard = templateCard.cloneNode(true);

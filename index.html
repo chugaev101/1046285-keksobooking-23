@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -90,8 +91,8 @@
           <input id="title" name="title" type="text" minlength="30" maxlength="100" placeholder="Милая, уютная квартирка в центре Токио" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
-          <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text">
+          <label class="ad-form__label" for="address" tabindex="-1" style="pointer-events: none;">Адрес (координаты)</label>
+          <input id="address" name="address" type="text" tabindex="-1" readonly style="pointer-events: none;">
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -230,5 +231,6 @@
     </div>
   </template>
   <script type="module" src="js/main.js"></script>
+  <script src="leaflet/leaflet.js"></script>
 </body>
 </html>
