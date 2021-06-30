@@ -1,9 +1,13 @@
+import {getMainMarkerCoordinate} from './map.js';
+import {sendData} from '../tools/server-api.js';
+import {showModalFailedSubmit, showModalSuccessSubmit} from './dialog.js';
+
 const adForm = document.querySelector('.ad-form');
 const formElements = adForm.querySelectorAll('.ad-form__element');
+const filterForm = document.querySelector('.map__filters');
+const filterElements = document.querySelectorAll('.map__filter');
 const titleInput = adForm.querySelector('#title');
 const titleMinLength = titleInput.minLength;
-const titleMaxLength = titleInput.maxLength;
-const CHARACTERS_REMAINING = 11;
 const coordinateInput = adForm.querySelector('#address');
 const typeInput = adForm.querySelector('#type');
 const MIN_PRICES_FOR_TYPES = {'bungalow': 0, 'flat': 1000, 'hotel': 3000, 'house': 5000, 'palace': 10000};
@@ -18,17 +22,51 @@ const resetButton = adForm.querySelector('.ad-form__reset');
 
 const deactivatePage = () => {
   adForm.classList.add('ad-form--disabled');
+  filterForm.classList.add('map__filters--disabled');
 
   formElements.forEach((element) => {
     element.disabled = true;
   });
+  filterElements.forEach((element) => {
+    element.disabled = true;
+  });
 };
 
-const activatePage = () => {
+const activatePage = (lat, lng) => {
   adForm.classList.remove('ad-form--disabled');
+  filterForm.classList.remove('map__filters--disabled');
+  coordinateInput.value = `${lat}, ${lng}`;
 
   formElements.forEach((element) => {
     element.disabled = false;
+  });
+  filterElements.forEach((element) => {
+    element.disabled = false;
+  });
+};
+
+const resetButtonHandler = (resetMap) => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    adForm.reset();
+    filterForm.reset();
+    resetMap(coordinateInput);
+  });
+};
+
+const submitFormHandler = (reset) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => {
+        showModalSuccessSubmit();
+        evt.target.reset();
+        reset(coordinateInput);
+      },
+      () => showModalFailedSubmit(),
+      new FormData(evt.target),
+    );
   });
 };
 
@@ -36,9 +74,6 @@ titleInput.addEventListener('input', () => {
   switch (true) {
     case titleInput.value.length < titleMinLength:
       titleInput.setCustomValidity(`Ещё как минимум ${titleMinLength - titleInput.value.length} симв.`);
-      break;
-    case titleInput.value.length > titleMaxLength - CHARACTERS_REMAINING:
-      titleInput.setCustomValidity(`Осталось ${titleMaxLength - titleInput.value.length} симв.`);
       break;
     default:
       titleInput.setCustomValidity('');
@@ -81,9 +116,6 @@ formCheckInTime.addEventListener('input', (evt) => {
   });
 });
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  adForm.reset();
-});
+getMainMarkerCoordinate(coordinateInput);
 
-export {deactivatePage, activatePage, resetButton, coordinateInput};
+export {deactivatePage, activatePage, submitFormHandler, resetButtonHandler};

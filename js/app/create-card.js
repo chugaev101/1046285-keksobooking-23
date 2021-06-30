@@ -46,15 +46,17 @@ const createCard = (obj) => {
     const photoList = newCard.querySelector('.popup__photos');
     let photoTemplate = photoList.removeChild(newCard.querySelector('.popup__photo'));
 
-    if (!photos.length) {
-      photoList.remove();
-    }
+    if (photos) {
+      if (!photos.length) {
+        photoList.remove();
+      }
 
-    photos.forEach((photoLink) => {
-      photoTemplate = photoTemplate.cloneNode(true);
-      photoTemplate.src = photoLink;
-      photoList.appendChild(photoTemplate);
-    });
+      photos.forEach((photoLink) => {
+        photoTemplate = photoTemplate.cloneNode(true);
+        photoTemplate.src = photoLink;
+        photoList.appendChild(photoTemplate);
+      });
+    }
   };
 
   addPhotos();
@@ -63,13 +65,19 @@ const createCard = (obj) => {
     (data) ? newCard.querySelector(selector).textContent = data : newCard.querySelector(selector).remove();
   };
 
+  const addFeatures = () => {
+    if (obj.offer.features) {
+      return obj.offer.features.join(', ');
+    }
+  };
+
   addDataToElement('.popup__title', obj.offer.title);
   addDataToElement('.popup__text--address', obj.offer.address);
   addDataToElement('.popup__text--price', `${obj.offer.price} ₽/ночь`);
   addDataToElement('.popup__type', obj.offer.type);
   addDataToElement('.popup__text--capacity', getRoomCapacityText());
   addDataToElement('.popup__text--time', `Заезд после ${obj.offer.checkin}, выезд до ${obj.offer.checkout}`);
-  addDataToElement('.popup__features', obj.offer.features.join(', '));
+  addDataToElement('.popup__features', addFeatures());
   addDataToElement('.popup__description', obj.offer.description);
   addDataToElement('.popup__avatar', obj.author.avatar);
 

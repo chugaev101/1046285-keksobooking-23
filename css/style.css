@@ -918,6 +918,61 @@ fieldset {
   border: 2px solid #ff5635;
 }
 
+/* сообщение об ошибке загрузки объявлений */
+
+.load-error__popup {
+  position: absolute;
+  top: 30px;
+  right: -370px;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 370px;
+  height: 130px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 3px solid #f0f0ea;
+  border-right: 0;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  z-index: 10000;
+
+  transition: right 1s ease;
+}
+
+.load-error__popup--show {
+  transition: right 1s ease;
+  right: 0;
+}
+
+.load-error__image {
+  position: absolute;
+  top: 35px;
+  right: 25px;
+  width: 55px;
+  height: 55px;
+  background: url("../img/noLoadPin.png") no-repeat center #ffffff;
+  background-size: contain;
+  z-index: 90000;
+}
+
+.load-error__text {
+  margin-top: 0;
+  width: fit-content;
+  font-size: 19px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.load-error__button {
+  margin-right: 13px;
+  background-color: #ffffff;
+  border: 2px solid #ffaa99;
+  border-radius: 8px;
+
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
 
 /**
  * Сообщения об успешном и неуспешном создании объявления
