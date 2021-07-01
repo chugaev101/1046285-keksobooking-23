@@ -1,24 +1,16 @@
-/* eslint-disable no-console */
-import {deactivatePage, activatePage, resetButton, coordinateInput} from './form.js';
-import {createCard} from '../app/create-card.js';
-import {generateTestAds} from '../tools/test-data.js';
-
+const map = L.map('map-canvas');
 const defaultCoordinate = {lat: 35.68053, lng: 139.75515};
 const COORDINATE_LENGTH = 5;
-const testData = generateTestAds();
 
-coordinateInput.value = `${defaultCoordinate.lat}, ${defaultCoordinate.lng}`;
-
-deactivatePage();
-
-const map = L.map('map-canvas')
-  .on('load', () => {
-    activatePage();
+const loadMap = (activateFn) => {
+  map.on('load', () => {
+    activateFn;
   })
-  .setView({
-    lat: defaultCoordinate.lat,
-    lng: defaultCoordinate.lng,
-  }, 10);
+    .setView({
+      lat: defaultCoordinate.lat,
+      lng: defaultCoordinate.lng,
+    }, 12);
+};
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -50,13 +42,15 @@ const mainMarker = L.marker(
   },
 ).addTo(map);
 
-mainMarker.on('moveend', (evt) => {
-  const coordinates = evt.target.getLatLng();
+const getMainMarkerCoordinate = (coordinateInput) => {
+  mainMarker.on('moveend', (evt) => {
+    const coordinates = evt.target.getLatLng();
 
-  coordinateInput.value = `${coordinates.lat.toFixed(COORDINATE_LENGTH)}, ${coordinates.lng.toFixed(COORDINATE_LENGTH)}`;
-});
+    coordinateInput.value = `${coordinates.lat.toFixed(COORDINATE_LENGTH)}, ${coordinates.lng.toFixed(COORDINATE_LENGTH)}`;
+  });
+};
 
-resetButton.addEventListener('click', () => {
+const resetMap = (coordinateInput) => {
   mainMarker.setLatLng({
     lat: defaultCoordinate.lat,
     lng: defaultCoordinate.lng,
@@ -64,22 +58,25 @@ resetButton.addEventListener('click', () => {
   map.setView({
     lat: defaultCoordinate.lat,
     lng: defaultCoordinate.lng,
-  }, 10);
+  }, 12);
 
   coordinateInput.value = `${defaultCoordinate.lat}, ${defaultCoordinate.lng}`;
-});
+};
 
-testData.forEach((element) => {
-  L.marker(
-    {
-      lat: element.location.lat,
-      lng: element.location.lng,
-    },
-    {
-      icon: adPinIcon,
-    },
-  )
-    .bindPopup(createCard(element), {keepInView: true})
-    .addTo(map);
-});
+const createMarkers = (data, createPopup) => {
+  data.forEach((element) => {
+    L.marker(
+      {
+        lat: element.location.lat,
+        lng: element.location.lng,
+      },
+      {
+        icon: adPinIcon,
+      },
+    )
+      .bindPopup(createPopup(element), {keepInView: true})
+      .addTo(map);
+  });
+};
 
+export {defaultCoordinate, loadMap, createMarkers, getMainMarkerCoordinate, resetMap};

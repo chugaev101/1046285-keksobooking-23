@@ -19,6 +19,16 @@
     <!-- Карта объявлений -->
     <section class="map">
 
+      <!-- Сообщение об ошибке загрузки объявлений -->
+      <template id="load_error">
+        <div class="load-error__popup">
+          <p class="load-error__text">При загрузке объявлений<br>произошла ошибка</p>
+          <div class="load-error__image"></div>
+          <button class="load-error__button load-error__button--reload" type="button">Перезагрузить</button>
+          <button class="load-error__button load-error__button--hidden" type="button">Спрятать</button>
+        </div>
+      </template>
+
       <!-- Блок для вставки карты -->
       <div class="map__canvas" id="map-canvas"></div>
 
