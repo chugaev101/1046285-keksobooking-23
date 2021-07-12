@@ -36,7 +36,7 @@ const showModalSuccessSubmit = () => {
   setTimeout(hiddenMessage, MESSAGE_DELAY_TIME);
 };
 
-const showModalFailedSubmit = () => {
+const showModalFailed = () => {
   const errorMessage = errorSubmitMessageFragment.querySelector('.error').cloneNode(true);
   const errorButton = errorMessage.querySelector('.error__button');
 
@@ -47,4 +47,4 @@ const showModalFailedSubmit = () => {
   });
 };
 
-export {showModalFailedSubmit, showModalSuccessSubmit, showLoadError};
+export {showModalFailed, showModalSuccessSubmit, showLoadError};

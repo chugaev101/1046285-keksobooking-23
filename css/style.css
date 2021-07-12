@@ -147,6 +147,10 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+.map__filter:disabled {
+  pointer-events: none;
+}
+
 .map__feature {
   display: inline-block;
   overflow: hidden;
@@ -169,6 +173,11 @@ fieldset {
 
 .map__feature--wifi {
   background-position: 2px 5px;
+}
+
+.map__checkbox:disabled + .map__feature {
+  background-color: #9a9a9a;
+  pointer-events: none;
 }
 
 .map__checkbox:checked + .map__feature--wifi {
@@ -238,6 +247,137 @@ fieldset {
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
 }
 
+.pagination {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  display: grid;
+  grid-template-columns: 30px auto 30px;
+  background-color: #ffffff;
+  border: 3px solid #f0f0ea;
+  border-top-right-radius: 10px;
+  border-bottom: 0;
+  box-shadow: 0.5px -0.5px 2px #9a9a9a;
+  z-index: 1000;
+}
+
+.pagination__button {
+  position: relative;
+  border: none;
+  background-color: transparent;
+  outline-offset: -1px;
+}
+
+.pagination__button::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 9px;
+  right: 4px;
+  width: 23px;
+  height: 23px;
+  /* border: 1.5px solid #000000; */
+  border-radius: 50%;
+}
+
+.pagination__button:hover::before {
+  box-shadow: 0 0 4px #353535;
+}
+
+.pagination__button:active::before {
+  box-shadow: inset 0 0 4px #353535;
+}
+
+.pagination__button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 15px;
+  right: 12px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #000000;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.pagination__button:active::after {
+  border: 1.5px solid #353535;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.pagination__button--previos {
+  grid-column: 1/2;
+  grid-row: 1/3;
+}
+
+.pagination__button--previous::after {
+  right: 8px;
+  transform: rotate(-135deg);
+}
+
+.pagination__button--next {
+  grid-column: 3/4;
+  grid-row: 1/3;
+}
+
+.pagination__button--next::after {
+  transform: rotate(45deg);
+}
+
+.pagination__text {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  margin: 0 10px 0 10px;
+
+  text-align: center;
+  font-size: 0.9rem;
+  color: #999999;
+}
+
+.pagination__list {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 3px 0;
+}
+
+.pagination__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.pagination__item:hover {
+  box-shadow: 0 0 7px #ff6347;
+}
+
+.pagination__item:active {
+  box-shadow: inset 0 0 7px #ff6347;
+  color: #9a9a9a;
+}
+
+.pagination__item--current {
+  background-color: #ff6347;
+  color: #ffffff;
+  pointer-events: none;
+}
+
+.pagination__link {
+  text-decoration: none;
+}
 
 /* Форма для публикации объявления
    ========================================================================== */
