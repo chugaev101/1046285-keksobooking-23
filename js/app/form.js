@@ -1,11 +1,10 @@
+/* eslint-disable no-console */
 import {getMainMarkerCoordinate} from './map.js';
 import {sendData} from '../tools/server-api.js';
-import {showModalFailedSubmit, showModalSuccessSubmit} from './dialog.js';
+import {showModalFailed, showModalSuccessSubmit} from './dialog.js';
 
 const adForm = document.querySelector('.ad-form');
 const formElements = adForm.querySelectorAll('.ad-form__element');
-const filterForm = document.querySelector('.map__filters');
-const filterElements = document.querySelectorAll('.map__filter');
 const titleInput = adForm.querySelector('#title');
 const titleMinLength = titleInput.minLength;
 const coordinateInput = adForm.querySelector('#address');
@@ -20,38 +19,35 @@ const formCheckInTime = adForm.querySelector('.ad-form__element--time');
 const checkInLists = formCheckInTime.querySelectorAll('select');
 const resetButton = adForm.querySelector('.ad-form__reset');
 
-const deactivatePage = () => {
+const deactivatePage = (cb) => {
   adForm.classList.add('ad-form--disabled');
-  filterForm.classList.add('map__filters--disabled');
 
   formElements.forEach((element) => {
     element.disabled = true;
   });
-  filterElements.forEach((element) => {
-    element.disabled = true;
-  });
+
+  cb();
 };
 
-const activatePage = (lat, lng) => {
+const activatePage = (lat, lng, cb) => {
   adForm.classList.remove('ad-form--disabled');
-  filterForm.classList.remove('map__filters--disabled');
   coordinateInput.value = `${lat}, ${lng}`;
 
   formElements.forEach((element) => {
     element.disabled = false;
   });
-  filterElements.forEach((element) => {
-    element.disabled = false;
-  });
+
+  cb();
 };
 
-const resetButtonHandler = (resetMap) => {
+const resetButtonHandler = (resetMap, cb) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     adForm.reset();
-    filterForm.reset();
     resetMap(coordinateInput);
   });
+
+  cb();
 };
 
 const submitFormHandler = (reset) => {
@@ -64,7 +60,7 @@ const submitFormHandler = (reset) => {
         evt.target.reset();
         reset(coordinateInput);
       },
-      () => showModalFailedSubmit(),
+      () => showModalFailed(),
       new FormData(evt.target),
     );
   });

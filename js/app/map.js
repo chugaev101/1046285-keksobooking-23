@@ -1,6 +1,8 @@
 const map = L.map('map-canvas');
 const defaultCoordinate = {lat: 35.68053, lng: 139.75515};
 const COORDINATE_LENGTH = 5;
+const DISPLAY_LIMITATION = 10;
+const markers = L.layerGroup().addTo(map);
 
 const loadMap = (activateFn) => {
   map.on('load', () => {
@@ -64,19 +66,23 @@ const resetMap = (coordinateInput) => {
 };
 
 const createMarkers = (data, createPopup) => {
-  data.forEach((element) => {
-    L.marker(
-      {
-        lat: element.location.lat,
-        lng: element.location.lng,
-      },
-      {
-        icon: adPinIcon,
-      },
-    )
-      .bindPopup(createPopup(element), {keepInView: true})
-      .addTo(map);
-  });
+  markers.clearLayers();
+
+  for (let id = 0; id < DISPLAY_LIMITATION; id++) {
+    if (data[id]) {
+      L.marker(
+        {
+          lat: data[id].location.lat,
+          lng: data[id].location.lng,
+        },
+        {
+          icon: adPinIcon,
+        },
+      )
+        .bindPopup(createPopup(data[id]), {keepInView: true})
+        .addTo(markers);
+    }
+  }
 };
 
 export {defaultCoordinate, loadMap, createMarkers, getMainMarkerCoordinate, resetMap};
