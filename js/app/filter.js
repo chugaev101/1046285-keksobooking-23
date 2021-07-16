@@ -1,14 +1,11 @@
 const filterForm = document.querySelector('.map__filters');
 const filterElements = filterForm.querySelectorAll('.map__filter');
-const filterType = filterForm.querySelector('#housing-type');
-const filterPrice = filterForm.querySelector('#housing-price');
-const filterRooms = filterForm.querySelector('#housing-rooms');
-const filterGuests = filterForm.querySelector('#housing-guests');
 const featuresCheckboxes = filterForm.querySelectorAll('[name=features]');
-const filters = [];
+const DISPLAY_LIMIT = 10;
+const filters = {};
 const features = [];
-const lowPrice = 10000;
-const highPrice = 50000;
+const LOW_PRICE = 10000;
+const HIGH_PRICE = 50000;
 
 const deactivateFilters = () => {
   filterForm.classList.add('map__filters--disabled');
@@ -41,19 +38,14 @@ const getFilters = (cb) => {
   filterForm.addEventListener('input', (evt) => {
     if (evt.target.classList.contains('map__filter')) {
 
-      switch (true) {
-        case evt.target.name === filterType.name:
-          (evt.target.value === 'any') ? filters[0] = null : filters[0] = evt.target.value;
-          break;
-        case evt.target.name === filterPrice.name:
-          (evt.target.value === 'any') ? filters[1] = null : filters[1] = evt.target.value;
-          break;
-        case evt.target.name === filterRooms.name:
-          (evt.target.value === 'any') ? filters[2] = null : filters[2] = +evt.target.value;
-          break;
-        case evt.target.name === filterGuests.name:
-          (evt.target.value === 'any') ? filters[3] = null : filters[3] = +evt.target.value;
-          break;
+      const filterKey = evt.target.name.split('').splice(evt.target.name.indexOf('-') + 1, Infinity).join('');
+
+      if (evt.target.value === 'any') {
+        delete filters[filterKey];
+      } else if (+evt.target.value) {
+        filters[filterKey] = +evt.target.value;
+      } else {
+        filters[filterKey] = evt.target.value;
       }
     }
 
@@ -88,23 +80,51 @@ const compareAds = (adA, adB) => {
 };
 
 const filtering = (data) => {
-  let filteredData = data;
+  const copiedData = data.slice();
+  const filteredData = [];
 
-  filters.filter((filter) => filter !== null)
-    .forEach((filter) => {
-      if (filter === 'low') {
-        filteredData = filteredData.filter((obj) => obj.offer.price < lowPrice);
-      } else if (filter === 'middle') {
-        filteredData = filteredData.filter((obj) => obj.offer.price >= lowPrice && obj.offer.price < highPrice);
-      } else if (filter === 'high') {
-        filteredData = filteredData.filter((obj) => obj.offer.price > highPrice);
-      } else {
-        filteredData = filteredData.filter((obj) => Object.values(obj.offer).includes(filter));
+  if (features.length) {
+    copiedData.sort(compareAds);
+  }
+
+  for (let id = 0; id < copiedData.length; id++) {
+    let hitCounter = 0;
+
+    if (filteredData.length === DISPLAY_LIMIT) {
+      break;
+    }
+
+
+    Object.keys(filters).forEach((key) => {
+
+      if (key === 'price') {
+        switch (true) {
+          case filters[key] === 'low':
+            if (copiedData[id].offer.price < LOW_PRICE) {
+              hitCounter++;
+            }
+            break;
+          case filters[key] === 'middle':
+            if (copiedData[id].offer.price  > LOW_PRICE && copiedData[id].offer.price < HIGH_PRICE) {
+              hitCounter++;
+            }
+            break;
+          case filters[key] === 'high':
+            if (copiedData[id].offer.price  > HIGH_PRICE) {
+              hitCounter++;
+            }
+            break;
+        }
+      }
+
+      if (copiedData[id].offer[key] === filters[key]) {
+        hitCounter++;
       }
     });
 
-  if (features) {
-    return filteredData.slice().sort(compareAds);
+    if (hitCounter === Object.values(filters).length) {
+      filteredData.push(copiedData[id]);
+    }
   }
 
   return filteredData;
