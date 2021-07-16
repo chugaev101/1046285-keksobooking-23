@@ -18,6 +18,11 @@ const numberSeatsOptions = numberSeatsInput.querySelectorAll('option');
 const formCheckInTime = adForm.querySelector('.ad-form__element--time');
 const checkInLists = formCheckInTime.querySelectorAll('select');
 const resetButton = adForm.querySelector('.ad-form__reset');
+const VALID_GRAPHIC_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const inputAvatar = adForm.querySelector('#avatar');
+const userAvatarPreview = adForm.querySelector('.ad-form-header__preview-image');
+const inputPhotoHousing = adForm.querySelector('#images');
+const housingPreview = adForm.querySelector('.ad-form__photo-image');
 
 const deactivatePage = (cb) => {
   adForm.classList.add('ad-form--disabled');
@@ -45,9 +50,8 @@ const resetButtonHandler = (resetMap, cb) => {
     evt.preventDefault();
     adForm.reset();
     resetMap(coordinateInput);
+    cb();
   });
-
-  cb();
 };
 
 const submitFormHandler = (reset) => {
@@ -65,6 +69,28 @@ const submitFormHandler = (reset) => {
     );
   });
 };
+
+const setPreview = (input, output) => {
+  input.addEventListener('change', () => {
+    const avatar = input.files[0];
+    const fileName = avatar.name.toLowerCase();
+
+    const matches = VALID_GRAPHIC_TYPES.some((it) => fileName.endsWith(it));
+
+    if (matches) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        output.src = reader.result;
+      });
+
+      reader.readAsDataURL(avatar);
+    }
+  });
+};
+
+setPreview(inputAvatar, userAvatarPreview);
+setPreview(inputPhotoHousing, housingPreview);
 
 titleInput.addEventListener('input', () => {
   switch (true) {

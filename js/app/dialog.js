@@ -45,6 +45,14 @@ const showModalFailed = () => {
   errorButton.addEventListener('click', () => {
     errorMessage.remove();
   });
+
+  window.addEventListener('keydown', (evt) => {
+    if (evt.keyCode === 27) {
+      errorMessage.remove();
+    }
+
+    window.removeEventListener('keydown', () => errorMessage.remove());
+  }, true);
 };
 
 export {showModalFailed, showModalSuccessSubmit, showLoadError};
