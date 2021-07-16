@@ -47,7 +47,7 @@ const showModalFailed = () => {
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.keyCode === 27) {
+    if (evt.key === 'Escape') {
       errorMessage.remove();
     }
 
