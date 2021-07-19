@@ -1,7 +1,8 @@
-const map = L.map('map-canvas');
-const defaultCoordinate = {lat: 35.68053, lng: 139.75515};
 const COORDINATE_LENGTH = 5;
 const DISPLAY_LIMITATION = 10;
+const DEFAULT_ZOOM = 12;
+const map = L.map('map-canvas');
+const defaultCoordinate = {lat: 35.68053, lng: 139.75515};
 const markers = L.layerGroup().addTo(map);
 
 const loadMap = (activateFn) => {
@@ -11,7 +12,7 @@ const loadMap = (activateFn) => {
     .setView({
       lat: defaultCoordinate.lat,
       lng: defaultCoordinate.lng,
-    }, 12);
+    }, DEFAULT_ZOOM);
 };
 
 L.tileLayer(
@@ -45,7 +46,7 @@ const mainMarker = L.marker(
 ).addTo(map);
 
 const getMainMarkerCoordinate = (coordinateInput) => {
-  mainMarker.on('moveend', (evt) => {
+  mainMarker.on('move', (evt) => {
     const coordinates = evt.target.getLatLng();
 
     coordinateInput.value = `${coordinates.lat.toFixed(COORDINATE_LENGTH)}, ${coordinates.lng.toFixed(COORDINATE_LENGTH)}`;

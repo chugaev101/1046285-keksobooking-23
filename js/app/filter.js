@@ -1,11 +1,11 @@
+const DISPLAY_LIMIT = 10;
+const LOW_PRICE = 10000;
+const HIGH_PRICE = 50000;
+const filters = {};
+const features = [];
 const filterForm = document.querySelector('.map__filters');
 const filterElements = filterForm.querySelectorAll('.map__filter');
 const featuresCheckboxes = filterForm.querySelectorAll('[name=features]');
-const DISPLAY_LIMIT = 10;
-const filters = {};
-const features = [];
-const LOW_PRICE = 10000;
-const HIGH_PRICE = 50000;
 
 const deactivateFilters = () => {
   filterForm.classList.add('map__filters--disabled');

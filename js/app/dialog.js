@@ -1,10 +1,13 @@
-const pageMain = document.querySelector('main');
+const ERROR_POPUP_DELAY_TIME = 2000;
+const BUTTON_CLOSE = 'Escape';
+const pageBody = document.querySelector('body');
 const map = document.querySelector('.map');
 const errorLoadAdsFragment = map.querySelector('#load_error').content;
-const successSubmitMessageFragment = document.querySelector('#success').content;
-const errorSubmitMessageFragment = document.querySelector('#error').content;
-const ERROR_POPUP_DELAY_TIME = 2000;
-const MESSAGE_DELAY_TIME = 2500;
+const successMessageFragment = document.querySelector('#success').content;
+const successMessage = successMessageFragment.querySelector('.success').cloneNode(true);
+const errorMessageFragment = document.querySelector('#error').content;
+const errorMessage = errorMessageFragment.querySelector('.error').cloneNode(true);
+const errorButton = errorMessage.querySelector('.error__button');
 
 const showLoadError = () => {
   const errorLoadAdsPopup = errorLoadAdsFragment.querySelector('.load-error__popup').cloneNode(true);
@@ -27,32 +30,42 @@ const showLoadError = () => {
   });
 };
 
+const hiddenMessage = (element) => element.remove();
+
 const showModalSuccessSubmit = () => {
-  const successMessage = successSubmitMessageFragment.querySelector('.success').cloneNode(true);
-  const hiddenMessage = () => successMessage.remove();
+  pageBody.append(successMessage);
 
-  pageMain.append(successMessage);
+  successMessage.addEventListener('click', () => {
+    hiddenMessage(successMessage);
 
-  setTimeout(hiddenMessage, MESSAGE_DELAY_TIME);
-};
-
-const showModalFailed = () => {
-  const errorMessage = errorSubmitMessageFragment.querySelector('.error').cloneNode(true);
-  const errorButton = errorMessage.querySelector('.error__button');
-
-  pageMain.append(errorMessage);
-
-  errorButton.addEventListener('click', () => {
-    errorMessage.remove();
+    successMessage.removeEventListener('click', hiddenMessage);
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      errorMessage.remove();
+    if (evt.key === BUTTON_CLOSE) {
+      hiddenMessage(successMessage);
     }
 
-    window.removeEventListener('keydown', () => errorMessage.remove());
-  }, true);
+    window.removeEventListener('keydown', hiddenMessage);
+  });
+};
+
+const showModalFailed = () => {
+  pageBody.append(errorMessage);
+
+  errorButton.addEventListener('click', () => {
+    hiddenMessage(errorMessage);
+
+    errorMessage.removeEventListener('click', hiddenMessage);
+  });
+
+  window.addEventListener('keydown', (evt) => {
+    if (evt.key === BUTTON_CLOSE) {
+      hiddenMessage(errorMessage);
+    }
+
+    window.removeEventListener('keydown', hiddenMessage);
+  });
 };
 
 export {showModalFailed, showModalSuccessSubmit, showLoadError};

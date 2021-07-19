@@ -1,24 +1,23 @@
-/* eslint-disable no-console */
 import {getMainMarkerCoordinate} from './map.js';
 import {sendData} from '../tools/server-api.js';
 import {showModalFailed, showModalSuccessSubmit} from './dialog.js';
 
+const MIN_PRICES_FOR_TYPES = {'bungalow': 0, 'flat': 1000, 'hotel': 3000, 'house': 5000, 'palace': 10000};
+const VALID_GRAPHIC_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const ROOM_CAPACITY = {1: [1], 2: [1, 2], 3: [1, 2, 3], 100: [0]};
 const adForm = document.querySelector('.ad-form');
 const formElements = adForm.querySelectorAll('.ad-form__element');
 const titleInput = adForm.querySelector('#title');
 const titleMinLength = titleInput.minLength;
 const coordinateInput = adForm.querySelector('#address');
 const typeInput = adForm.querySelector('#type');
-const MIN_PRICES_FOR_TYPES = {'bungalow': 0, 'flat': 1000, 'hotel': 3000, 'house': 5000, 'palace': 10000};
 const priceInput = adForm.querySelector('#price');
 const roomNumberInput = adForm.querySelector('#room_number');
-const roomCapacity = {1: [1], 2: [1, 2], 3: [1, 2, 3], 100: [0]};
 const numberSeatsInput = adForm.querySelector('#capacity');
 const numberSeatsOptions = numberSeatsInput.querySelectorAll('option');
 const formCheckInTime = adForm.querySelector('.ad-form__element--time');
 const checkInLists = formCheckInTime.querySelectorAll('select');
 const resetButton = adForm.querySelector('.ad-form__reset');
-const VALID_GRAPHIC_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const inputAvatar = adForm.querySelector('#avatar');
 const userAvatarPreview = adForm.querySelector('.ad-form-header__preview-image');
 const inputPhotoHousing = adForm.querySelector('#images');
@@ -118,7 +117,7 @@ typeInput.addEventListener('input', (evt) => {
 });
 
 roomNumberInput.addEventListener('input', (evt) => {
-  const currentCapacity = roomCapacity[evt.target.value];
+  const currentCapacity = ROOM_CAPACITY[evt.target.value];
 
   for (const numberSeats of numberSeatsOptions) {
     if (currentCapacity.includes(+numberSeats.value)) {
