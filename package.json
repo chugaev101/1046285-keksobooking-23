@@ -12,8 +12,9 @@
   },
   "devDependencies": {
     "browser-sync": "2.26.14",
-    "eslint": "^7.18.0",
-    "eslint-config-htmlacademy": "4.0.0"
+    "eslint": "7.31.0",
+    "eslint-config-htmlacademy": "4.0.0",
+    "express": "4.17.1"
   },
   "license": "MIT",
   "dependencies": {},
