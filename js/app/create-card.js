@@ -44,7 +44,7 @@ const addAvatar = (obj, card) => {
   const avatar = card.querySelector('.popup__avatar');
 
   (obj.author.avatar) ? avatar.src = obj.author.avatar : avatar.src = 'img/avatars/default.png';
-}
+};
 
 const addPhotos = (obj, card) => {
   const photos = obj.offer.photos;
