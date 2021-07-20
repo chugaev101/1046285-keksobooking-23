@@ -30,15 +30,16 @@ const showLoadError = () => {
   });
 };
 
-const hiddenMessage = (element) => element.remove();
+const hiddenMessage = (element) => {
+  element.remove();
+  element.removeEventListener('click', hiddenMessage);
+};
 
 const showModalSuccessSubmit = () => {
   pageBody.append(successMessage);
 
   successMessage.addEventListener('click', () => {
     hiddenMessage(successMessage);
-
-    successMessage.removeEventListener('click', hiddenMessage);
   });
 
   window.addEventListener('keydown', (evt) => {
@@ -55,8 +56,6 @@ const showModalFailed = () => {
 
   errorButton.addEventListener('click', () => {
     hiddenMessage(errorMessage);
-
-    errorMessage.removeEventListener('click', hiddenMessage);
   });
 
   window.addEventListener('keydown', (evt) => {

@@ -5,6 +5,8 @@ import {showModalFailed, showModalSuccessSubmit} from './dialog.js';
 const MIN_PRICES_FOR_TYPES = {'bungalow': 0, 'flat': 1000, 'hotel': 3000, 'house': 5000, 'palace': 10000};
 const VALID_GRAPHIC_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const ROOM_CAPACITY = {1: [1], 2: [1, 2], 3: [1, 2, 3], 100: [0]};
+const DEFAULT_IMAGE = 'img/muffin-grey.svg';
+const DEFAULT_NUMBER_SEATS = 1;
 const adForm = document.querySelector('.ad-form');
 const formElements = adForm.querySelectorAll('.ad-form__element');
 const titleInput = adForm.querySelector('#title');
@@ -48,6 +50,15 @@ const resetButtonHandler = (resetMap, cb) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     adForm.reset();
+
+    numberSeatsOptions.forEach((option) => {
+      if (+option.value === DEFAULT_NUMBER_SEATS) {
+        option.disabled = false;
+      } else {
+        option.disabled = true;
+      }
+    });
+
     resetMap(coordinateInput);
     cb();
   });
@@ -86,6 +97,11 @@ const setPreview = (input, output) => {
       reader.readAsDataURL(avatar);
     }
   });
+};
+
+const resetPreviews = () => {
+  userAvatarPreview.src = DEFAULT_IMAGE;
+  housingPreview.src = DEFAULT_IMAGE;
 };
 
 setPreview(inputAvatar, userAvatarPreview);
@@ -139,4 +155,4 @@ formCheckInTime.addEventListener('input', (evt) => {
 
 getMainMarkerCoordinate(coordinateInput);
 
-export {deactivatePage, activatePage, submitFormHandler, resetButtonHandler};
+export {deactivatePage, activatePage, submitFormHandler, resetButtonHandler, resetPreviews};

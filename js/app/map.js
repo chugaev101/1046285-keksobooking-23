@@ -1,8 +1,10 @@
 const COORDINATE_LENGTH = 5;
 const DISPLAY_LIMITATION = 10;
 const DEFAULT_ZOOM = 12;
+const MainPinSettings = {url: 'img/main-pin.svg', size: [52, 52], anchor: [26, 52]};
+const AdPinSettings = {url: 'img/pin.svg', size: [40, 40], anchor: [20, 40]};
 const map = L.map('map-canvas');
-const defaultCoordinate = {lat: 35.68053, lng: 139.75515};
+const DefaultCoordinate = {lat: 35.68053, lng: 139.75515};
 const markers = L.layerGroup().addTo(map);
 
 const loadMap = (activateFn) => {
@@ -10,8 +12,8 @@ const loadMap = (activateFn) => {
     activateFn;
   })
     .setView({
-      lat: defaultCoordinate.lat,
-      lng: defaultCoordinate.lng,
+      lat: DefaultCoordinate.lat,
+      lng: DefaultCoordinate.lng,
     }, DEFAULT_ZOOM);
 };
 
@@ -22,28 +24,30 @@ L.tileLayer(
   },
 ).addTo(map);
 
-const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+const createPin = (url, size, anchor) => L.icon({
+  iconUrl: url,
+  iconSize: size,
+  iconAnchor: anchor,
 });
 
-const adPinIcon = L.icon({
-  iconUrl: 'img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
+const placeMarker = (lat, lng, draggable = false, createIcon, location) => L.marker(
+  {
+    lat: lat,
+    lng: lng,
+  },
+  {
+    draggable: draggable,
+    icon: createIcon,
+  },
+).addTo(location);
 
-const mainMarker = L.marker(
-  {
-    lat: defaultCoordinate.lat,
-    lng: defaultCoordinate.lng,
-  },
-  {
-    draggable: true,
-    icon: mainPinIcon,
-  },
-).addTo(map);
+const mainMarker = placeMarker(
+  DefaultCoordinate.lat,
+  DefaultCoordinate.lng,
+  true,
+  createPin(MainPinSettings.url, MainPinSettings.size, MainPinSettings.anchor),
+  map,
+);
 
 const getMainMarkerCoordinate = (coordinateInput) => {
   mainMarker.on('move', (evt) => {
@@ -55,15 +59,15 @@ const getMainMarkerCoordinate = (coordinateInput) => {
 
 const resetMap = (coordinateInput) => {
   mainMarker.setLatLng({
-    lat: defaultCoordinate.lat,
-    lng: defaultCoordinate.lng,
+    lat: DefaultCoordinate.lat,
+    lng: DefaultCoordinate.lng,
   });
   map.setView({
-    lat: defaultCoordinate.lat,
-    lng: defaultCoordinate.lng,
+    lat: DefaultCoordinate.lat,
+    lng: DefaultCoordinate.lng,
   }, 12);
 
-  coordinateInput.value = `${defaultCoordinate.lat}, ${defaultCoordinate.lng}`;
+  coordinateInput.value = `${DefaultCoordinate.lat}, ${DefaultCoordinate.lng}`;
 };
 
 const createMarkers = (data, createPopup) => {
@@ -71,19 +75,15 @@ const createMarkers = (data, createPopup) => {
 
   for (let id = 0; id < DISPLAY_LIMITATION; id++) {
     if (data[id]) {
-      L.marker(
-        {
-          lat: data[id].location.lat,
-          lng: data[id].location.lng,
-        },
-        {
-          icon: adPinIcon,
-        },
-      )
-        .bindPopup(createPopup(data[id]), {keepInView: true})
-        .addTo(markers);
+      placeMarker(
+        data[id].location.lat,
+        data[id].location.lng,
+        true,
+        createPin(AdPinSettings.url, AdPinSettings.size, AdPinSettings.anchor),
+        markers,
+      ).bindPopup(createPopup(data[id]), {keepInView: true});
     }
   }
 };
 
-export {defaultCoordinate, loadMap, createMarkers, getMainMarkerCoordinate, resetMap};
+export {DefaultCoordinate, loadMap, createMarkers, getMainMarkerCoordinate, resetMap};

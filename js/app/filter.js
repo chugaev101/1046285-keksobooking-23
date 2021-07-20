@@ -1,6 +1,10 @@
 const DISPLAY_LIMIT = 10;
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
+const NEXT_INDEX = 1;
+const REMOVAL_AMOUNT = 1;
+const FILTER_DEFAULT_VALUE = 'any';
+const PriceLevels = {title: 'price', low: 'low', middle: 'middle', high: 'high'};
 const filters = {};
 const features = [];
 const filterForm = document.querySelector('.map__filters');
@@ -31,26 +35,29 @@ const activateFilters = () => {
 
 const resetFilters = () => {
   filterForm.reset();
+  filterElements.forEach((element) => {
+    element.value = FILTER_DEFAULT_VALUE;
+  });
 };
 
 const getFilters = (cb) => {
 
   filterForm.addEventListener('input', (evt) => {
     if (evt.target.classList.contains('map__filter')) {
-
-      const filterKey = evt.target.name.split('').splice(evt.target.name.indexOf('-') + 1, Infinity).join('');
+      const targetIndex = evt.target.name.indexOf('-') + NEXT_INDEX;
+      const filterKey = evt.target.name.slice(targetIndex, Infinity);
 
       if (evt.target.value === 'any') {
         delete filters[filterKey];
-      } else if (+evt.target.value) {
-        filters[filterKey] = +evt.target.value;
-      } else {
+      } else if (isNaN(evt.target.value)) {
         filters[filterKey] = evt.target.value;
+      } else {
+        filters[filterKey] = +evt.target.value;
       }
     }
 
     if (evt.target.classList.contains('map__checkbox')) {
-      (evt.target.checked) ? features.push(evt.target.value) : features.splice(features.indexOf(evt.target.value), 1);
+      (evt.target.checked) ? features.push(evt.target.value) : features.splice(features.indexOf(evt.target.value), REMOVAL_AMOUNT);
     }
 
     cb();
@@ -79,7 +86,7 @@ const compareAds = (adA, adB) => {
   return rankB - rankA;
 };
 
-const filtering = (data) => {
+const filterOut = (data) => {
   const copiedData = data.slice();
   const filteredData = [];
 
@@ -97,19 +104,19 @@ const filtering = (data) => {
 
     Object.keys(filters).forEach((key) => {
 
-      if (key === 'price') {
+      if (key === PriceLevels.title) {
         switch (true) {
-          case filters[key] === 'low':
+          case filters[key] === PriceLevels.low:
             if (copiedData[id].offer.price < LOW_PRICE) {
               hitCounter++;
             }
             break;
-          case filters[key] === 'middle':
+          case filters[key] === PriceLevels.middle:
             if (copiedData[id].offer.price  > LOW_PRICE && copiedData[id].offer.price < HIGH_PRICE) {
               hitCounter++;
             }
             break;
-          case filters[key] === 'high':
+          case filters[key] === PriceLevels.high:
             if (copiedData[id].offer.price  > HIGH_PRICE) {
               hitCounter++;
             }
@@ -130,4 +137,4 @@ const filtering = (data) => {
   return filteredData;
 };
 
-export {deactivateFilters, activateFilters, resetFilters, getFilters, filtering};
+export {deactivateFilters, activateFilters, resetFilters, getFilters, filterOut};
